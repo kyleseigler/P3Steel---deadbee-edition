@@ -1,30 +1,62 @@
 // aviation_power_socket.scad
 
 difference(){
-  // base shape of object
-  translate([0,0,0]){
-    cube([30,60,30]);
+  union(){
+    difference(){
+      // base shape of object
+      translate([0,0,0]){
+        cube([40,75,30]);
+      }
+      // main cavity of object
+      translate([3,3,3]){
+        cube([34,72.1,24]);
+      }
+    }
+    
+    // cylindrical support around frame mounting holes
+    translate([0,9.5,15]){
+      rotate([0,90,0]){
+        cylinder($fn=100,h=6,r=9);
+      }
+    }
+    translate([0,63.8,15]){
+      rotate([0,90,0]){
+        cylinder($fn=100,h=6,r=9);
+      }
+    }
   }
-  // main cavity of object
-  translate([3,3,3]){
-    cube([24,57.1,24]);
-  }
+  
+
   // side cutaway of object
-  translate([26,3,3]){
-    cube([4.1,57.1,24]);
+  translate([36,3,3]){
+    cube([4.1,72.1,24]);
   }
   // hole for 16mm aviation socket
-  translate([15,-1,15]){
+  translate([25,-1,15]){
     rotate([-90,0,0]){
       cylinder($fn=100,h=4.2,r=8.5);
     }
   }
   // cable comb holes for zip ties
-  for(x=[4.5,10.5,16.5,22.5]){
-    for(y=[30,45]){
+  for(x=[14.5,20.5,26.5,32.5]){
+    for(y=[30,45,60]){
       translate([x,y,-.1]){
         cube([3,10,30.2]);
       }
+    }
+  }
+
+/*  mounting holes are 54.3mm apart (centered on
+ * side of base), the outside hole is 9.5mm from
+ * the edge of the frame. */
+  translate([-.1,9.5,15]){
+    rotate([0,90,0]){
+      cylinder($fn=100,h=6.2,r=1.7);
+    }
+  }
+  translate([-.1,63.8,15]){
+    rotate([0,90,0]){
+      cylinder($fn=100,h=6.2,r=1.7);
     }
   }
 }
