@@ -46,10 +46,10 @@ difference(){
   
   // opening for belt to pass through - lower
   translate([14.9,29,8]){
-    cube([5.5,2.8,12.1]);
+    cube([5.5,2.6,12.1]);
   }
   translate([34,29,8]){
-    cube([5.6,2.8,12.1]);
+    cube([5.6,2.6,12.1]);
   }
 
   // left post for x-belt

@@ -1,6 +1,6 @@
 // x-carriage.scad
 
-$fn=100;
+$fn=200;
 
 difference(){
   // base structure
@@ -8,11 +8,11 @@ difference(){
   
   // bearing carriers
   for(bearingLocationsY=[0,45]){
-    for(bearingLocationsX=[0,30.1]){
+    for(bearingLocationsX=[-0.5,30.6]){ // was originally 0,30.1
       translate([bearingLocationsX,bearingLocationsY,0]){
         translate([-0.1,12,14]){
           rotate([0,90,0]){
-            cylinder(h=25.1,r=8);
+            cylinder(h=25.1,r=8.25); // was originally 8
           }
         }
       }
@@ -40,39 +40,52 @@ difference(){
   
   // opening for belt to pass through - upper
   translate([-0.1,37,8]){
-    cube([55.2,4,12.1]);
+    cube([55.2,6,12.1]);
   }
   
   // opening for belt to pass through - lower
-  translate([-0.1,29,8]){
-    cube([20.1,3,12.1]);
+  translate([-0.1,28.7,8]){
+    cube([19.1,2.6,12.1]);
   }
-  translate([35,29,8]){
-    cube([20.1,3,12.1]);
+  translate([36,28.7,8]){
+    cube([19.1,2.6,12.1]);
   }
   
   // left post for x-belt
-  translate([22,30.5,8]){
+  translate([22,30,8]){
     difference(){
-      cylinder(h=12.1,r=4);
-      cylinder(h=12.1,r=2);
+      cylinder(h=12.1,r=5);
+      cylinder(h=12.1,r=2.5);
     }
   }
   
   // right post for x-belt
-  translate([33,30.5,8]){
+  translate([33,30,8]){
     difference(){
-      cylinder(h=12.1,r=4);
-      cylinder(h=12.1,r=2);
+      cylinder(h=12.1,r=5);
+      cylinder(h=12.1,r=2.5);
     }
   }  
   
   // bolt holes for the hotend carrier
-  for(hotendCarrierBoltHolesX=[0,20]){
-    for(hotendCarrierBoltHolesY=[0,20]){
+  for(hotendCarrierBoltHolesX=[0,22.5]){
+    for(hotendCarrierBoltHolesY=[0,22.5]){
       translate([hotendCarrierBoltHolesX,hotendCarrierBoltHolesY,0]){
-        translate([17.5,25,-0.1]){
-          cylinder(h=20.2,r=2.6);
+        translate([16.25,23.75,-0.1]){
+          cylinder(h=20.2,r=2.1);
+        }
+      }
+    }
+  }
+  
+  // holes to be tapped for M3 screws (to hold bearings in place)
+  for(M3screwHolesX=[-0.1,45]){
+    for(M3screwHolesY=[0,61]){
+      translate([M3screwHolesX,M3screwHolesY,0]){
+        translate([0,4,8]){
+          rotate([0,90,0]){
+            cylinder(h=10.1,r=1.4);
+          }
         }
       }
     }
