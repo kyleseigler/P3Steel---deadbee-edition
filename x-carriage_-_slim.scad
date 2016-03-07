@@ -4,8 +4,13 @@ $fn=200;
 
 difference(){
   // base structure
-  translate([16.5,0,0]){
-    cube([22,70,20]);
+  union(){
+    translate([16.5,0,0]){
+      cube([22,70,20]);
+    }
+//    translate([10,20,0]){
+//      cube([30,30,20]);
+//    }
   }
   // bearing carriers
   for(bearingLocationsY=[0,45]){
@@ -69,10 +74,10 @@ difference(){
   }  
   
   // bolt holes for the hotend carrier
-  for(hotendCarrierBoltHolesX=[0,22]){
-    for(hotendCarrierBoltHolesY=[0,22]){
+  for(hotendCarrierBoltHolesX=[0,22.5]){
+    for(hotendCarrierBoltHolesY=[0,22.5]){
       translate([hotendCarrierBoltHolesX,hotendCarrierBoltHolesY,0]){
-        translate([16.5,23.5,-0.1]){ // were originally 16.5,23.5,-0.1
+        translate([16.25,23.25,-0.1]){ // were originally 16.5,23.5,-0.1
           cylinder(h=20.2,r=2);
         }
       }
