@@ -39,6 +39,7 @@ difference(){
       }
     }
   }
+  // this next for loop can be removed once some longer M5 bolts come in (20mm long just isn't enough to be that useful)
   for(x=[0,45]){
     translate([x,0,0]){
       translate([6.5,8,-0.1]){
