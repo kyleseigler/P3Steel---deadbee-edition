@@ -1,5 +1,5 @@
 //=====================================//
-// x-end-idler.scad                    //
+// x-end-idler_-_tensioner.scad	       //
 //=====================================//
 // Designed by Kyle Seigler and        //
 // released under the MIT license,     //
@@ -19,59 +19,59 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 // all dimensions in mm
+// designed for M5 bolts and M5 nuts
 
 $fn=200;
 
-union(){
-  // base cube for idler
-  difference(){
-    translate([4.5,0,0]){
-      cube([30.5,16,58]);
+difference(){
+  union(){
+    translate([0,0,0]){
+      cube([58,16,15]); // base cube
     }
-    for(rodHolesZ=[0,45]){
-      translate([0,0,rodHolesZ]){
-        translate([17.5,8,6.5]){
-          rotate([0,90,0]){
-            cylinder(r=4.1,h=35.2,center=true);
-          }
-        }
-      }
-    }
-    // idler pulley bracket opening
-    translate([-0.1,3.75,12.75]){
-      cube([35.2,8.5,32.5]);
-    }
-
-  }
-  // base cylinder for bearing holder
-  difference(){
-    union(){
-      translate([10,-7.7,0]){
-        cylinder(r=9.5,h=50,center=false);
-      }
-      translate([12.5,-7.5,0]){
-        cube([7,7.5,50]);
-      }
-      translate([7.5,-16,0]){
-        cube([27.5,16,10]);
-      }
-    }
-    translate([10,-7.7,-0.1]){
-      cylinder(r=7.7,h=50.2,center=false);
-    }
-    translate([0,-17.5,-0.1]){
-      rotate([0,0,40]){
-        cube([10,3,50.2]);
-      }
-    }
-    // Z-rod hole
-    translate([26,-7.7,-0.1]){
-      cylinder(r=3,h=7.7,center=false);
-    }
-    // Z-rod nut inset
-    translate([26,-7.7,5]){
-      cylinder($fn=6,r=4.75,h=8.1,center=false);
+    translate([14,4,15]){
+      cube([30,7.9,20]); // base insert
     }
   }
-  
+  for(x=[0,45]){
+    translate([x,0,0]){
+      translate([6.5,8,-0.1]){
+        cylinder(r=2.75,h=15.2); // through-holes for adjuster screws
+      }
+    }
+  }
+  for(x=[0,45]){
+    translate([x,0,0]){
+      translate([6.5,8,-0.1]){
+        cylinder(r=4.25,h=6.1); // through-holes for adjuster screw countersink (more tension possible)
+      }
+    }
+  }
+  for(x=[0,45]){
+    translate([x,0,11]){
+      translate([6.5,8,-0.1]){
+        cylinder($fn=6,r=4.75,h=15.2); // through-holes for adjuster nuts
+      }
+    }
+  }
+  translate([19,3.5,-0.1]){
+    cube([20,9,35.2]); // opening for belt and idler pulleys
+  }
+  translate([29,-0.1,7.5]){
+    rotate([-90,0,0]){
+      cylinder(r=2.75,h=16.2); // opening for idler pulley bolt
+    }
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
