@@ -5,14 +5,14 @@ difference(){
     difference(){
       // base shape of object
       translate([0,0,0]){
-        cube([40,75,30]);
+        cube([40,75,38]);
       }
       // main cavity of object
       translate([3,3,3]){
-        cube([34,72.1,24]);
+        cube([34,72.1,32]);
       }
     }
-    
+
     // cylindrical support around frame mounting holes
     translate([0,9.5,15]){
       rotate([0,90,0]){
@@ -25,23 +25,23 @@ difference(){
       }
     }
   }
-  
+
 
   // side cutaway of object
   translate([36,3,3]){
-    cube([4.1,72.1,24]);
+    cube([4.1,72.1,32]);
   }
-  // hole for 16mm aviation socket
-  translate([25,-1,15]){
+  // hole for 28mm aviation socket
+  translate([21,-1,19]){
     rotate([-90,0,0]){
-      cylinder($fn=100,h=4.2,r=8.5);
+      cylinder($fn=100,h=4.2,r=14);
     }
   }
   // cable comb holes for zip ties
-  for(x=[14.5,20.5,26.5,32.5]){
+  for(x=[8.5,14.5,20.5,26.5,32.5]){
     for(y=[30,45,60]){
       translate([x,y,-.1]){
-        cube([3,10,30.2]);
+        cube([3,10,38.2]);
       }
     }
   }

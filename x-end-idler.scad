@@ -20,7 +20,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 // all dimensions in mm
 
-$fn=200;
+$fn=500;
 
 union(){
   // base cube for idler
@@ -73,5 +73,5 @@ union(){
       cylinder($fn=6,r=4.75,h=8.1,center=false);
     }
   }
-  
+
 }
