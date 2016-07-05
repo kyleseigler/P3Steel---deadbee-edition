@@ -1,5 +1,5 @@
 //=====================================//
-// end-effector.scad          	       //
+// end-effector.scad                   //
 //=====================================//
 // Designed by Kyle Seigler and        //
 // released under the MIT license,     //
