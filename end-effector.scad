@@ -51,10 +51,11 @@ e3dv6HeatsinkCoolingDuctChannelDiameter=  16; // This is the channel behind the 
 inductiveProbeCarrierThickness=           6;
 inductiveProbeOpeningDiameter=            12; // 12mm measured
 inductiveProbeCarrierWidth=               inductiveProbeOpeningDiameter+10;
-inductiveProbeCarrierLength=              15+baseplateThickness;
+inductiveProbeCarrierLength=              12+baseplateThickness;
 inductiveProbeCarrierDrop=                16; // How much farther down the inductive probe carrier has to be to reach the bed
 
 // Complete end-effector
+
 difference(){
   union(){
     baseplate();
@@ -81,6 +82,7 @@ difference(){
 }
 */
 
+
 // Modules
 module hotendCoolingDuctExterior(){
   translate([0.01,-(baseplateSide-e3dCarrierThickness)/2-e3dv6HeatsinkHeight/2-e3dv6HeatsinkDistanceFromThroat-e3dv6DistanceFromMiddleToBottomOfThroat,e3dCarrierDistanceFromCarriage+baseplateThickness]){
@@ -97,7 +99,7 @@ module hotendCoolingDuctExterior(){
       }
     }
     translate([-15,e3dv6HeatsinkHeight/2+0.19,-14]){
-      cube([6,3,28]);
+      cube([6,4,27.99]);
     }
   }
 }
@@ -114,9 +116,11 @@ module hotendCoolingDuctInterior(){
       }
     }
   }
-  translate([-13,-(baseplateSide-e3dCarrierThickness)/2,e3dCarrierDistanceFromCarriage+baseplateThickness]){
+  translate([-12.5,-(baseplateSide-e3dCarrierThickness)/2,e3dCarrierDistanceFromCarriage+baseplateThickness]){
     rotate([90,0,0]){
-      cylinder(center=true,h=e3dv6HeatsinkHeight+0.01,r=e3dv6HeatsinkCoolingDuctDiameter/2);
+      scale([1,1.5,1]){
+        cylinder(center=true,h=e3dv6HeatsinkHeight+0.01,r=e3dv6HeatsinkCoolingDuctDiameter/2);
+      }
     }
   }
 
