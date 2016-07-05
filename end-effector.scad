@@ -33,11 +33,11 @@ baseplateSide=                    mountingHoleSpacing+18;
 
 e3dCarrierWidth=                  baseplateSide/2;
 e3dCarrierThickness=              14;
-e3dCarrierLength=                 40;
-e3dCarrierDistanceFromCarriage=   30;
+e3dCarrierDistanceFromCarriage=   32;
 e3dv6HolderInnerDiameter=         12; // 12.02mm measured
 e3dv6HolderOuterDiameter=         16; // 16.03mm measured
 e3dv6DistanceFromBaseplate=       34;
+e3dCarrierLength=                 e3dCarrierDistanceFromCarriage+(e3dv6HolderOuterDiameter)/2+6;
 
 inductiveProbeCarrierThickness=   6;
 inductiveProbeOpeningDiameter=    12; // 12mm measured
@@ -50,6 +50,7 @@ difference(){
   union(){
     baseplate();
     e3dCarrier();
+    e3dv6CarrierClamp();
     translate([0,-inductiveProbeCarrierDrop,0]){
       inductiveProbeCarrier();
     }
@@ -59,6 +60,11 @@ difference(){
 }
 
 // Modules
+module e3dv6CarrierClamp(){
+  translate([(baseplateSide-e3dCarrierWidth)/2-3,-(baseplateSide-e3dCarrierThickness)/2,baseplateThickness+e3dCarrierDistanceFromCarriage]){
+    cube(center=true,[e3dCarrierWidth/2,e3dCarrierThickness,e3dv6HolderOuterDiameter+12]);
+  }
+}
 module e3dv6HolderCutout(){
   translate([0,-(baseplateSide-e3dCarrierThickness)/2,e3dCarrierDistanceFromCarriage+baseplateThickness]){
     rotate([90,0,0]){
@@ -95,9 +101,7 @@ module inductiveProbeCarrier(){
 }
 module e3dCarrier(){
   translate([-(baseplateSide-e3dCarrierWidth)/2,-(baseplateSide-e3dCarrierThickness)/2,e3dCarrierLength/2+baseplateThickness]){
-    cube(center=true,[e3dCarrierWidth,e3dCarrierThickness,e3dCarrierLength]){
-      
-    }
+    cube(center=true,[e3dCarrierWidth,e3dCarrierThickness,e3dCarrierLength]);
   }
 }
 module baseplate(){
