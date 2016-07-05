@@ -24,31 +24,77 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 $fn=100;
 
 // Variables
-mountingHoleSpacing=      22.5; // 22.5mm default
-mountingHoleDiameter=     4.1;
-mountingHoleNutDiameter=  6;
+mountingHoleSpacing=              22.5; // 22.5mm default
+mountingHoleDiameter=             4.1;
+mountingHoleNutDiameter=          6;
 
-baseplateThickness=       5;  // 5mm default
-baseplateSide=            40;
+baseplateThickness=               5;  // 5mm default
+baseplateSide=                    mountingHoleSpacing+18;
 
-e3dCarrierWidth=          18;
-e3dCarrierThickness=      14;
-e3dCarrierLength=         25;
-e3dv6ThroatInnerDiameter= 10;
-e3dv6ThroatOuterDiameter= 15;
+e3dCarrierWidth=                  baseplateSide/2;
+e3dCarrierThickness=              14;
+e3dCarrierLength=                 40;
+e3dCarrierDistanceFromCarriage=   30;
+e3dv6HolderInnerDiameter=         12; // 12.02mm measured
+e3dv6HolderOuterDiameter=         16; // 16.03mm measured
+e3dv6DistanceFromBaseplate=       34;
+
+inductiveProbeCarrierThickness=   6;
+inductiveProbeOpeningDiameter=    12; // 12mm measured
+inductiveProbeCarrierWidth=       inductiveProbeOpeningDiameter+10;
+inductiveProbeCarrierLength=      15+baseplateThickness;
+inductiveProbeCarrierDrop=        16; // How much farther down the inductive probe carrier has to be to reach the bed
 
 // Complete end-effector
 difference(){
   union(){
     baseplate();
     e3dCarrier();
+    translate([0,-inductiveProbeCarrierDrop,0]){
+      inductiveProbeCarrier();
+    }
   }
   baseplateHoles();
+  e3dv6HolderCutout();
 }
 
 // Modules
+module e3dv6HolderCutout(){
+  translate([0,-(baseplateSide-e3dCarrierThickness)/2,e3dCarrierDistanceFromCarriage+baseplateThickness]){
+    rotate([90,0,0]){
+      union(){
+        translate([0,0,8]){
+          cylinder(center=true,h=10,r=e3dv6HolderOuterDiameter/2);
+        }
+        translate([0,0,0]){
+          cylinder(center=true,h=6.01,r=e3dv6HolderInnerDiameter/2);
+        }
+        translate([0,0,-8]){
+          cylinder(center=true,h=10,r=e3dv6HolderOuterDiameter/2);          
+        }
+      }
+    }
+  }
+}
+module inductiveProbeCarrier(){
+  difference(){
+    union(){
+      translate([(baseplateSide-inductiveProbeCarrierWidth)/2,-(baseplateSide-inductiveProbeCarrierThickness)/2,(inductiveProbeCarrierLength+baseplateThickness)/2]){
+        cube(center=true,[inductiveProbeCarrierWidth,inductiveProbeCarrierThickness,inductiveProbeCarrierLength+baseplateThickness]);
+      }
+      translate([(baseplateSide-inductiveProbeCarrierWidth)/2,-inductiveProbeCarrierDrop/2,baseplateThickness/2]){
+        cube(center=true,[inductiveProbeCarrierWidth,inductiveProbeCarrierDrop,baseplateThickness]);
+      }
+    }
+    translate([(baseplateSide-inductiveProbeCarrierWidth)/2,-(baseplateSide-inductiveProbeCarrierThickness)/2,inductiveProbeCarrierLength/2+baseplateThickness]){
+      rotate([90,0,0]){
+        cylinder(center=true,h=inductiveProbeCarrierThickness+0.01,r=inductiveProbeOpeningDiameter/2);
+      }
+    }
+  }
+}
 module e3dCarrier(){
-  translate([0,(e3dCarrierThickness-baseplateSide)/2,e3dCarrierLength/2+baseplateThickness]){
+  translate([-(baseplateSide-e3dCarrierWidth)/2,-(baseplateSide-e3dCarrierThickness)/2,e3dCarrierLength/2+baseplateThickness]){
     cube(center=true,[e3dCarrierWidth,e3dCarrierThickness,e3dCarrierLength]){
       
     }
@@ -67,7 +113,7 @@ module baseplateHoles(){
       for(mountingHolesX=[0,mountingHoleSpacing]){
         for(mountingHolesY=[0,mountingHoleSpacing]){
           translate([mountingHolesX,mountingHolesY,0]){
-            cylinder(center=true,h=100,r=mountingHoleDiameter/2);
+            cylinder(center=true,h=baseplateThickness+0.01,r=mountingHoleDiameter/2);
           }
         }
       }
