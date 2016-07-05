@@ -47,12 +47,21 @@ e3dv6HeatsinkDistanceFromThroat=          4.2; // 4.17mm measured
 e3dv6DistanceFromMiddleToBottomOfThroat=  6; // 6mm measured
 e3dv6HeatsinkCoolingDuctDiameter=         8; // This is the channel where air passes through the hotend carrier arm.
 e3dv6HeatsinkCoolingDuctChannelDiameter=  16; // This is the channel behind the heatsink area itself, not the one through the carrier arm.
+hotendCoolingDuctMountingHolesDiameter=   2.8;
 
 inductiveProbeCarrierThickness=           6;
 inductiveProbeOpeningDiameter=            12; // 12mm measured
 inductiveProbeCarrierWidth=               inductiveProbeOpeningDiameter+10;
 inductiveProbeCarrierLength=              12+baseplateThickness;
 inductiveProbeCarrierDrop=                16; // How much farther down the inductive probe carrier has to be to reach the bed
+
+// Variables and connectingTube() module pulled from filastruder_toroidal_duct.scad
+connectingTubeLength=                     10;
+toroidOuter=                              8;
+fanOutletLength=                          17.5;
+fanOutletDepth=                           4;
+fanOutletWidth=                           12.25;
+toroidInner=                              6.5;
 
 // Complete end-effector
 
@@ -66,11 +75,13 @@ difference(){
       inductiveProbeCarrier();
     }
     hotendCoolingDuctExterior();
+    connectingTube();
   }
   baseplateHoles();
   e3dv6HolderCutout();
   e3dv6CarrierClampHoles();
   hotendCoolingDuctInterior();
+  hotendCoolingDuctMountingHoles();
 }
 
 /*
@@ -84,6 +95,44 @@ difference(){
 
 
 // Modules
+module connectingTube(){
+  translate([-13,0,30]){
+    rotate([-90,90,0]){
+      difference(){
+        union(){
+          cylinder(h=connectingTubeLength,r=toroidOuter);
+          translate([0,0,connectingTubeLength/2]){
+            cylinder(h=connectingTubeLength/2,r1=toroidOuter,r2=fanOutletLength/2+3);
+          }
+        }
+        difference(){
+          translate([0,0,connectingTubeLength-fanOutletDepth/2]){
+            cube(center=true,[fanOutletLength*2,fanOutletWidth*2,fanOutletDepth+0.01]);
+          }
+          translate([0,0,connectingTubeLength-(fanOutletDepth-0.01)/2]){
+            cube(center=true,[fanOutletLength,fanOutletWidth,fanOutletDepth+0.02]);
+          }
+        }
+    
+        translate([0,0,-0.005]){
+          cylinder(h=connectingTubeLength+.01,r=toroidInner);
+        }
+      }
+    }
+  }
+}
+module hotendCoolingDuctMountingHoles(){
+  translate([0,-(baseplateSide-e3dCarrierThickness)/2-e3dv6HeatsinkHeight/2-e3dv6HeatsinkDistanceFromThroat-e3dv6DistanceFromMiddleToBottomOfThroat,e3dCarrierDistanceFromCarriage-baseplateThickness-1]){
+    for(z=[0,22]){
+      translate([-17,e3dv6HeatsinkHeight/2+0.19,z]){
+        rotate([90,0,0]){
+          cylinder(center=true,h=15,r=hotendCoolingDuctMountingHolesDiameter/2);
+        }
+      }
+    }
+  }
+
+}
 module hotendCoolingDuctExterior(){
   translate([0.01,-(baseplateSide-e3dCarrierThickness)/2-e3dv6HeatsinkHeight/2-e3dv6HeatsinkDistanceFromThroat-e3dv6DistanceFromMiddleToBottomOfThroat,e3dCarrierDistanceFromCarriage+baseplateThickness]){
     scale([1.5,1,1]){
@@ -98,7 +147,7 @@ module hotendCoolingDuctExterior(){
         }
       }
     }
-    translate([-15,e3dv6HeatsinkHeight/2+0.19,-14]){
+    translate([-20,e3dv6HeatsinkHeight/2+0.19,-14]){
       cube([6,4,27.99]);
     }
   }
@@ -186,7 +235,7 @@ module inductiveProbeCarrier(){
 module baseplateNutLocks(){
   difference(){
     translate([0,0,baseplateThickness]){
-      cube(center=true,[mountingHoleSpacing+mountingHoleDiameter/3,mountingHoleSpacing+mountingHoleDiameter/3,baseplateThickness]);
+      cube(center=true,[mountingHoleSpacing+2*mountingHoleDiameter,mountingHoleSpacing+2*mountingHoleDiameter,baseplateThickness]);
     }
     translate([0,0,baseplateThickness]){
       translate([-mountingHoleSpacing/2,-mountingHoleSpacing/2,0]){

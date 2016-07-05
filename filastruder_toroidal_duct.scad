@@ -42,9 +42,6 @@ fanOutletDepth=                 4;                // 4mm measured
 
 spacerHeight=                   12.5;             // 10mm default
 zipTieCylinderRadius=           toroidOuter+4;    // toroidOuter+4 default
-toroidOuter=			              8;                // 8 default
-toroidRadius=                   30;               // 25 default (this is the rotational width)
-elbowRadius=                    45;               // toroidRadius default
 
 //=======================//
 // Completed components: //
