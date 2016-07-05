@@ -45,6 +45,8 @@ e3dv6HeatsinkDiameter=                    22; // 22mm measured
 e3dv6HeatsinkHeight=                      26; // 25.92mm measured
 e3dv6HeatsinkDistanceFromThroat=          4.2; // 4.17mm measured
 e3dv6DistanceFromMiddleToBottomOfThroat=  6; // 6mm measured
+e3dv6HeatsinkCoolingDuctDiameter=         8; // This is the channel where air passes through the hotend carrier arm.
+e3dv6HeatsinkCoolingDuctChannelDiameter=  16; // This is the channel behind the heatsink area itself, not the one through the carrier arm.
 
 inductiveProbeCarrierThickness=           6;
 inductiveProbeOpeningDiameter=            12; // 12mm measured
@@ -62,28 +64,40 @@ difference(){
     translate([0,-inductiveProbeCarrierDrop,0]){
       inductiveProbeCarrier();
     }
-    difference(){
-      hotendCoolingDuctExterior();
-      hotendCoolingDuctInterior();
-    }
+    hotendCoolingDuctExterior();
   }
   baseplateHoles();
   e3dv6HolderCutout();
   e3dv6CarrierClampHoles();
+  hotendCoolingDuctInterior();
 }
+
+/*
+difference(){
+  hotendCoolingDuctExterior();
+  hotendCoolingDuctInterior();
+  e3dv6HolderCutout();
+  e3dCarrier();
+}
+*/
 
 // Modules
 module hotendCoolingDuctExterior(){
   translate([0.01,-(baseplateSide-e3dCarrierThickness)/2-e3dv6HeatsinkHeight/2-e3dv6HeatsinkDistanceFromThroat-e3dv6DistanceFromMiddleToBottomOfThroat,e3dCarrierDistanceFromCarriage+baseplateThickness]){
     scale([1.5,1,1]){
       difference(){
-        rotate([90,0,0]){
-          cylinder(center=true,h=e3dv6HeatsinkHeight,r=e3dv6HeatsinkDiameter/2+2);
+        translate([0,e3dv6HeatsinkDistanceFromThroat,0]){
+          rotate([90,0,0]){
+            cylinder(center=true,h=e3dv6HeatsinkHeight+e3dv6HeatsinkDistanceFromThroat*2,r=e3dv6HeatsinkDiameter/2+2);
+          }
         }
-        translate([10,0,0]){
+        translate([10.99,0,0]){
           cube(center=true,[e3dv6HeatsinkDiameter,2*e3dv6HeatsinkHeight,2*e3dv6HeatsinkDiameter]);
         }
       }
+    }
+    translate([-15,e3dv6HeatsinkHeight/2+0.19,-14]){
+      cube([6,3,28]);
     }
   }
 }
@@ -92,7 +106,25 @@ module hotendCoolingDuctInterior(){
     rotate([90,0,0]){
       cylinder(center=true,h=e3dv6HeatsinkHeight+0.01,r=e3dv6HeatsinkDiameter/2);
     }
+    translate([-9,0,0]){
+      scale([1,1,1]){
+        rotate([90,0,0]){
+          cylinder(center=true,h=e3dv6HeatsinkHeight-3,r=e3dv6HeatsinkCoolingDuctChannelDiameter/2);
+        }
+      }
+    }
   }
+  translate([-13,-(baseplateSide-e3dCarrierThickness)/2,e3dCarrierDistanceFromCarriage+baseplateThickness]){
+    rotate([90,0,0]){
+      cylinder(center=true,h=e3dv6HeatsinkHeight+0.01,r=e3dv6HeatsinkCoolingDuctDiameter/2);
+    }
+  }
+
+}
+module e3dCarrier(){
+  translate([-(baseplateSide-e3dCarrierWidth)/2,-(baseplateSide-e3dCarrierThickness)/2,e3dCarrierLength/2+baseplateThickness]){
+    cube(center=true,[e3dCarrierWidth,e3dCarrierThickness,e3dCarrierLength]);
+  }  
 }
 module e3dv6CarrierClampHoles(){
   translate([0,-(baseplateSide-e3dCarrierThickness)/2,e3dCarrierDistanceFromCarriage-baseplateThickness]){
@@ -145,11 +177,6 @@ module inductiveProbeCarrier(){
         cylinder(center=true,h=inductiveProbeCarrierThickness+0.01,r=inductiveProbeOpeningDiameter/2);
       }
     }
-  }
-}
-module e3dCarrier(){
-  translate([-(baseplateSide-e3dCarrierWidth)/2,-(baseplateSide-e3dCarrierThickness)/2,e3dCarrierLength/2+baseplateThickness]){
-    cube(center=true,[e3dCarrierWidth,e3dCarrierThickness,e3dCarrierLength]);
   }
 }
 module baseplateNutLocks(){
