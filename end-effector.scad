@@ -24,29 +24,33 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 $fn=100;
 
 // Variables
-mountingHoleSpacing=              22.5; // 22.5mm default
-mountingHoleDiameter=             4.1;
-mountingHoleNutDiameter=          6;
+mountingHoleSpacing=                      22.5; // 22.5mm default
+mountingHoleDiameter=                     4.1;
+mountingHoleNutDiameter=                  6;
 
-baseplateThickness=               5;  // 5mm default
-baseplateSide=                    mountingHoleSpacing+18;
+baseplateThickness=                       5;  // 5mm default
+baseplateSide=                            mountingHoleSpacing+18;
 
-e3dCarrierWidth=                  baseplateSide/2;
-e3dCarrierThickness=              14;
-e3dCarrierDistanceFromCarriage=   32;
-e3dv6HolderInnerDiameter=         12; // 12.02mm measured
-e3dv6HolderOuterDiameter=         16; // 16.03mm measured
-e3dv6DistanceFromBaseplate=       34;
-e3dCarrierLength=                 e3dCarrierDistanceFromCarriage+(e3dv6HolderOuterDiameter)/2+6;
-e3dv6ClampingHoleDiameter=        3.4;
-e3dv6ClampingHoleNutDiameter=     5.5;
-e3dv6ClampingHoleNutDepth=        4;
+e3dCarrierWidth=                          baseplateSide/2;
+e3dCarrierThickness=                      14;
+e3dCarrierDistanceFromCarriage=           32;
+e3dv6HolderInnerDiameter=                 12; // 12.02mm measured
+e3dv6HolderOuterDiameter=                 16; // 16.03mm measured
+e3dv6DistanceFromBaseplate=               34;
+e3dCarrierLength=                         e3dCarrierDistanceFromCarriage+(e3dv6HolderOuterDiameter)/2+6;
+e3dv6ClampingHoleDiameter=                3.4;
+e3dv6ClampingHoleNutDiameter=             5.5;
+e3dv6ClampingHoleNutDepth=                 4;
+e3dv6HeatsinkDiameter=                    22; // 22mm measured
+e3dv6HeatsinkHeight=                      26; // 25.92mm measured
+e3dv6HeatsinkDistanceFromThroat=          4.2; // 4.17mm measured
+e3dv6DistanceFromMiddleToBottomOfThroat=  6; // 6mm measured
 
-inductiveProbeCarrierThickness=   6;
-inductiveProbeOpeningDiameter=    12; // 12mm measured
-inductiveProbeCarrierWidth=       inductiveProbeOpeningDiameter+10;
-inductiveProbeCarrierLength=      15+baseplateThickness;
-inductiveProbeCarrierDrop=        16; // How much farther down the inductive probe carrier has to be to reach the bed
+inductiveProbeCarrierThickness=           6;
+inductiveProbeOpeningDiameter=            12; // 12mm measured
+inductiveProbeCarrierWidth=               inductiveProbeOpeningDiameter+10;
+inductiveProbeCarrierLength=              15+baseplateThickness;
+inductiveProbeCarrierDrop=                16; // How much farther down the inductive probe carrier has to be to reach the bed
 
 // Complete end-effector
 difference(){
@@ -58,6 +62,10 @@ difference(){
     translate([0,-inductiveProbeCarrierDrop,0]){
       inductiveProbeCarrier();
     }
+    difference(){
+      hotendCoolingDuctExterior();
+      hotendCoolingDuctInterior();
+    }
   }
   baseplateHoles();
   e3dv6HolderCutout();
@@ -65,6 +73,27 @@ difference(){
 }
 
 // Modules
+module hotendCoolingDuctExterior(){
+  translate([0.01,-(baseplateSide-e3dCarrierThickness)/2-e3dv6HeatsinkHeight/2-e3dv6HeatsinkDistanceFromThroat-e3dv6DistanceFromMiddleToBottomOfThroat,e3dCarrierDistanceFromCarriage+baseplateThickness]){
+    scale([1.5,1,1]){
+      difference(){
+        rotate([90,0,0]){
+          cylinder(center=true,h=e3dv6HeatsinkHeight,r=e3dv6HeatsinkDiameter/2+2);
+        }
+        translate([10,0,0]){
+          cube(center=true,[e3dv6HeatsinkDiameter,2*e3dv6HeatsinkHeight,2*e3dv6HeatsinkDiameter]);
+        }
+      }
+    }
+  }
+}
+module hotendCoolingDuctInterior(){
+  translate([0.01,-(baseplateSide-e3dCarrierThickness)/2-e3dv6HeatsinkHeight/2-e3dv6HeatsinkDistanceFromThroat-e3dv6DistanceFromMiddleToBottomOfThroat,e3dCarrierDistanceFromCarriage+baseplateThickness]){
+    rotate([90,0,0]){
+      cylinder(center=true,h=e3dv6HeatsinkHeight+0.01,r=e3dv6HeatsinkDiameter/2);
+    }
+  }
+}
 module e3dv6CarrierClampHoles(){
   translate([0,-(baseplateSide-e3dCarrierThickness)/2,e3dCarrierDistanceFromCarriage-baseplateThickness]){
     rotate([0,90,0]){
