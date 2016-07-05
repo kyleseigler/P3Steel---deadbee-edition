@@ -38,6 +38,7 @@ e3dv6HolderInnerDiameter=         12; // 12.02mm measured
 e3dv6HolderOuterDiameter=         16; // 16.03mm measured
 e3dv6DistanceFromBaseplate=       34;
 e3dCarrierLength=                 e3dCarrierDistanceFromCarriage+(e3dv6HolderOuterDiameter)/2+6;
+e3dv6ClampingHoleDiameter=        3.4;
 
 inductiveProbeCarrierThickness=   6;
 inductiveProbeOpeningDiameter=    12; // 12mm measured
@@ -63,7 +64,15 @@ difference(){
 
 // Modules
 module e3dv6CarrierClampHoles(){
-  
+  translate([0,-(baseplateSide-e3dCarrierThickness)/2,e3dCarrierDistanceFromCarriage-baseplateThickness]){
+    rotate([0,90,0]){
+      for(x=[0,-(e3dv6HolderOuterDiameter+4)]){
+        translate([x,0,0]){
+          cylinder(center=true,h=50,r=e3dv6ClampingHoleDiameter/2);
+        }
+      }
+    }
+  }
 }
 module e3dv6CarrierClamp(){
   translate([(baseplateSide-e3dCarrierWidth)/2-3,-(baseplateSide-e3dCarrierThickness)/2,baseplateThickness+e3dCarrierDistanceFromCarriage]){
